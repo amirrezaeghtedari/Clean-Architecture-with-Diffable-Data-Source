@@ -10,6 +10,8 @@ import Foundation
 
 protocol WifiInteractorInput {
 	
+	var isWifiEnabled: Bool { get }
+	
 	func toggleWifi(enabled: Bool)
 	
 	func scanForNetworks(enabled: Bool)

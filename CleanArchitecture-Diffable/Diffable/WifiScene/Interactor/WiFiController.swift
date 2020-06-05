@@ -9,16 +9,14 @@ import Foundation
 
 class WiFiController {
 
-    typealias UpdateHandler = (WiFiController) -> Void
-
-    init(updateHandler: @escaping UpdateHandler) {
-        self.updateHandler = updateHandler
-        updateAvailableNetworks(allNetworks)
-        _performRandomUpdate()
+	var delegate: WifiControllerDelegate?
+	
+    init() {
+	
     }
 
     var scanForNetworks = true
-    var wifiEnabled = true
+    var isWifiEnabled = true
     var availableNetworks: Set<Network> {
         return _availableNetworks
     }
@@ -28,14 +26,13 @@ class WiFiController {
     }
 
     // MARK: Internal
-
-    private let updateHandler: UpdateHandler
     private var _availableNetworks = Set<Network>()
     private let updateInterval = 2000
     private var _availableNetworksDict = [UUID: Network]()
+	private let connectedNetwork = Network(name: "breeno-net")
     private func _performRandomUpdate() {
 
-        if wifiEnabled && scanForNetworks {
+        if isWifiEnabled && scanForNetworks {
             let shouldUpdate = true
             if shouldUpdate {
                 var updatedNetworks = Array(_availableNetworks)
@@ -76,7 +73,7 @@ class WiFiController {
                 }
 
                 // notify
-                updateHandler(self)
+				delegate?.wifiControllerDidUpdate(self, wifiEnabled: true, connectedNetwork: connectedNetwork, avaialbleNetworks: Array(availableNetworks))
             }
         }
 
@@ -118,11 +115,15 @@ class WiFiController {
 extension WiFiController: WifiInteractorInput {
 	
 	func toggleWifi(enabled: Bool) {
-		wifiEnabled = enabled
+		
+		isWifiEnabled = enabled
+		delegate?.wifiControllerDidUpdate(self, wifiEnabled: isWifiEnabled, connectedNetwork: nil, avaialbleNetworks: nil)
 	}
 	
 	func scanForNetworks(enabled: Bool) {
+		
 		scanForNetworks = enabled
+		_performRandomUpdate()
 	}
 	
 }

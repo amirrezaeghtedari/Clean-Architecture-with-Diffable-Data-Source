@@ -191,8 +191,7 @@ extension OutlineViewController: UICollectionViewDelegate {
             if let viewController = menuItem.outlineViewController {
 				let navController: UINavigationController
 				if viewController == WiFiSettingsViewController.self {
-					print("This is WifiSettings")
-					navController = UINavigationController(rootViewController: viewController.init())
+					navController = UINavigationController(rootViewController: WifiSettingsCompser.makeModule())
 				} else {
 					navController = UINavigationController(rootViewController: viewController.init())
 				}

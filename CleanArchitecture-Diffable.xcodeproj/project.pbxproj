@@ -14,6 +14,9 @@
 		76BCF86B248A44D3008EAB71 /* WifiControllerDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76BCF86A248A44D3008EAB71 /* WifiControllerDelegate.swift */; };
 		76BCF86D248A4748008EAB71 /* NetworkViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76BCF86C248A4748008EAB71 /* NetworkViewModel.swift */; };
 		76BCF86F248A47E7008EAB71 /* NetworkViewModelType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76BCF86E248A47E7008EAB71 /* NetworkViewModelType.swift */; };
+		76BCF871248A5130008EAB71 /* WifiPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76BCF870248A5130008EAB71 /* WifiPresenter.swift */; };
+		76BCF874248A5610008EAB71 /* WifiPresenterDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76BCF873248A5610008EAB71 /* WifiPresenterDelegate.swift */; };
+		76BCF876248A6700008EAB71 /* WifiSettingsCompser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76BCF875248A6700008EAB71 /* WifiSettingsCompser.swift */; };
 		FD000CBA22F0E68100AE3B95 /* TableViewEditingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD000CB922F0E68100AE3B95 /* TableViewEditingViewController.swift */; };
 		FD09E6D42276BC250009D23B /* SectionHeadersFootersViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD09E6D32276BC250009D23B /* SectionHeadersFootersViewController.swift */; };
 		FD09E6D62276BF030009D23B /* PinnedSectionHeaderFooterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD09E6D52276BF030009D23B /* PinnedSectionHeaderFooterViewController.swift */; };
@@ -64,6 +67,9 @@
 		76BCF86A248A44D3008EAB71 /* WifiControllerDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WifiControllerDelegate.swift; sourceTree = "<group>"; };
 		76BCF86C248A4748008EAB71 /* NetworkViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkViewModel.swift; sourceTree = "<group>"; };
 		76BCF86E248A47E7008EAB71 /* NetworkViewModelType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkViewModelType.swift; sourceTree = "<group>"; };
+		76BCF870248A5130008EAB71 /* WifiPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WifiPresenter.swift; sourceTree = "<group>"; };
+		76BCF873248A5610008EAB71 /* WifiPresenterDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WifiPresenterDelegate.swift; sourceTree = "<group>"; };
+		76BCF875248A6700008EAB71 /* WifiSettingsCompser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WifiSettingsCompser.swift; sourceTree = "<group>"; };
 		FD000CB922F0E68100AE3B95 /* TableViewEditingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableViewEditingViewController.swift; sourceTree = "<group>"; };
 		FD09E6D32276BC250009D23B /* SectionHeadersFootersViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SectionHeadersFootersViewController.swift; sourceTree = "<group>"; };
 		FD09E6D52276BF030009D23B /* PinnedSectionHeaderFooterViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PinnedSectionHeaderFooterViewController.swift; sourceTree = "<group>"; };
@@ -127,6 +133,7 @@
 				76BCF861248A3CE4008EAB71 /* Composer */,
 				76BCF860248A3CCD008EAB71 /* View */,
 				76BCF866248A3ED2008EAB71 /* Interactor */,
+				76BCF872248A5135008EAB71 /* Prsenter */,
 			);
 			path = WifiScene;
 			sourceTree = "<group>";
@@ -142,6 +149,7 @@
 		76BCF861248A3CE4008EAB71 /* Composer */ = {
 			isa = PBXGroup;
 			children = (
+				76BCF875248A6700008EAB71 /* WifiSettingsCompser.swift */,
 			);
 			path = Composer;
 			sourceTree = "<group>";
@@ -164,6 +172,15 @@
 				76BCF86C248A4748008EAB71 /* NetworkViewModel.swift */,
 			);
 			path = Models;
+			sourceTree = "<group>";
+		};
+		76BCF872248A5135008EAB71 /* Prsenter */ = {
+			isa = PBXGroup;
+			children = (
+				76BCF870248A5130008EAB71 /* WifiPresenter.swift */,
+				76BCF873248A5610008EAB71 /* WifiPresenterDelegate.swift */,
+			);
+			path = Prsenter;
 			sourceTree = "<group>";
 		};
 		A66BDDF27C93278D1A8E28FD /* LICENSE */ = {
@@ -415,6 +432,7 @@
 				FD65E17722761AFA00F8AF46 /* NestedGroupsViewController.swift in Sources */,
 				FD000CBA22F0E68100AE3B95 /* TableViewEditingViewController.swift in Sources */,
 				FD65E18A227646ED00F8AF46 /* BadgeSupplementrayView.swift in Sources */,
+				76BCF874248A5610008EAB71 /* WifiPresenterDelegate.swift in Sources */,
 				FD6007E6227E7E0000AC371F /* ConferenceNewsController.swift in Sources */,
 				FDCFA2972286987600D658EB /* SectionDecorationViewController.swift in Sources */,
 				FD65E17B22762ADB00F8AF46 /* OrthogonalScrollBehaviorViewController.swift in Sources */,
@@ -427,11 +445,13 @@
 				76BCF86B248A44D3008EAB71 /* WifiControllerDelegate.swift in Sources */,
 				FDA8D13B225F8531000127E1 /* AppDelegate.swift in Sources */,
 				FD65E1822276394000F8AF46 /* MountainsViewController.swift in Sources */,
+				76BCF876248A6700008EAB71 /* WifiSettingsCompser.swift in Sources */,
 				FD20C3C82268D99100935CB2 /* ConferenceVideoController.swift in Sources */,
 				FD934DD1226FDB9A0032CFFE /* DistinctSectionsViewController.swift in Sources */,
 				FD09E6D62276BF030009D23B /* PinnedSectionHeaderFooterViewController.swift in Sources */,
 				76BCF86F248A47E7008EAB71 /* NetworkViewModelType.swift in Sources */,
 				76BCF864248A3D16008EAB71 /* WifiInteractorInput.swift in Sources */,
+				76BCF871248A5130008EAB71 /* WifiPresenter.swift in Sources */,
 				FD6007E8227E81EF00AC371F /* ConferenceNewsFeedCell.swift in Sources */,
 				FD9DA09E2271289500D6168E /* ListCell.swift in Sources */,
 				FD934DCF226FD6B70032CFFE /* InsetItemsGridViewController.swift in Sources */,

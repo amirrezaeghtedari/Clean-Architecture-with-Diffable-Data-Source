@@ -10,5 +10,6 @@ import Foundation
 
 protocol WifiControllerDelegate {
 	
+	func wifiControllerDidUpdate(_: WiFiController, wifiEnabled: Bool, connectedNetwork: Network?, avaialbleNetworks: [Network]?)
 }
 

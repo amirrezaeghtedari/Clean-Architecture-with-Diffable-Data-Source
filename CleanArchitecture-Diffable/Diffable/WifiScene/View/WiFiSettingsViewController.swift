@@ -12,39 +12,51 @@ class WiFiSettingsViewController: UIViewController {
     enum Section: CaseIterable {
         case config, networks
     }
+	
+	var isVisible: Bool = false
+	
+	var firstShow: Bool = true
+	var wifiController: WifiInteractorInput!
 
     let tableView = UITableView(frame: .zero, style: .insetGrouped)
     var dataSource: UITableViewDiffableDataSource<Section, NetworkViewModel>! = nil
     var currentSnapshot: NSDiffableDataSourceSnapshot<Section, NetworkViewModel>! = nil
-    var wifiController: WiFiController! = nil
-    lazy var configurationItems: [NetworkViewModel] = {
-        return [NetworkViewModel(title: "Wi-Fi", type: .wifiEnabled),
-                NetworkViewModel(title: "breeno-net", type: .currentNetwork)]
-    }()
 
+	init(wifiController: WifiInteractorInput) {
+		self.wifiController = wifiController
+		super.init(nibName: nil, bundle: nil)
+	}
+
+	required init?(coder: NSCoder) {
+		fatalError("init(coder:) has not been implemented")
+	}
+	
     static let reuseIdentifier = "reuse-identifier"
 
     override func viewDidLoad() {
-        super.viewDidLoad()
+        
+		super.viewDidLoad()
         self.navigationItem.title = "Wi-Fi"
         configureTableView()
         configureDataSource()
-        updateUI(animated: false)
     }
+	
+	override func viewWillAppear(_ animated: Bool) {
+		
+		super.viewWillAppear(animated)
+		wifiController.toggleWifi(enabled: true)
+		wifiController.scanForNetworks(enabled: true)
+	}
 }
 
 extension WiFiSettingsViewController {
 
     func configureDataSource() {
-        wifiController = WiFiController { [weak self] (controller: WiFiController) in
-            guard let self = self else { return }
-            self.updateUI()
-        }
-
+		
         self.dataSource = UITableViewDiffableDataSource
             <Section, NetworkViewModel>(tableView: tableView) { [weak self]
                 (tableView: UITableView, indexPath: IndexPath, item: NetworkViewModel) -> UITableViewCell? in
-            guard let self = self, let wifiController = self.wifiController else { return nil }
+            guard let self = self else { return nil }
 
             let cell = tableView.dequeueReusableCell(
                 withIdentifier: WiFiSettingsViewController.reuseIdentifier,
@@ -61,7 +73,7 @@ extension WiFiSettingsViewController {
                 cell.textLabel?.text = item.title
                 if item.type == .wifiEnabled {
                     let enableWifiSwitch = UISwitch()
-                    enableWifiSwitch.isOn = wifiController.wifiEnabled
+					enableWifiSwitch.isOn = self.wifiController.isWifiEnabled
                     enableWifiSwitch.addTarget(self, action: #selector(self.toggleWifi(_:)), for: .touchUpInside)
                     cell.accessoryView = enableWifiSwitch
                 } else {
@@ -74,31 +86,7 @@ extension WiFiSettingsViewController {
             return cell
         }
         self.dataSource.defaultRowAnimation = .fade
-
-        wifiController.scanForNetworks = true
     }
-
-    /// - Tag: WiFiUpdate
-    func updateUI(animated: Bool = true) {
-        guard let controller = self.wifiController else { return }
-
-        let configItems = configurationItems.filter { !($0.type == .currentNetwork && !controller.wifiEnabled) }
-
-        currentSnapshot = NSDiffableDataSourceSnapshot<Section, NetworkViewModel>()
-
-        currentSnapshot.appendSections([.config])
-        currentSnapshot.appendItems(configItems, toSection: .config)
-
-        if controller.wifiEnabled {
-            let sortedNetworks = controller.availableNetworks.sorted { $0.name < $1.name }
-            let networkItems = sortedNetworks.map { NetworkViewModel(network: $0) }
-            currentSnapshot.appendSections([.networks])
-            currentSnapshot.appendItems(networkItems, toSection: .networks)
-        }
-
-        self.dataSource.apply(currentSnapshot, animatingDifferences: animated)
-    }
-
 }
 
 extension WiFiSettingsViewController {
@@ -117,7 +105,43 @@ extension WiFiSettingsViewController {
 
     @objc
     func toggleWifi(_ wifiEnabledSwitch: UISwitch) {
-        wifiController.wifiEnabled = wifiEnabledSwitch.isOn
-        updateUI()
+		wifiController.toggleWifi(enabled: wifiEnabledSwitch.isOn)
+		wifiController.scanForNetworks(enabled: wifiEnabledSwitch.isOn)
     }
+	
+}
+
+extension WiFiSettingsViewController: WifiPresenterDelegate {
+	
+	func wifiPresenterDidUpdate(_: WifiPresenter, wifiEnabled: Bool, configItem: NetworkViewModel, connectedNetwork: NetworkViewModel?, avaialbleNetworks: [NetworkViewModel]?) {
+		
+		currentSnapshot = NSDiffableDataSourceSnapshot<Section, NetworkViewModel>()
+		currentSnapshot.appendSections([.config])
+		currentSnapshot.appendItems([configItem])
+		
+		if let connectedNetwork = connectedNetwork {
+			currentSnapshot.appendItems([connectedNetwork])
+		}
+		
+		if let availableNetworks = avaialbleNetworks {
+			currentSnapshot.appendSections([.networks])
+			currentSnapshot.appendItems(availableNetworks)
+		}
+		
+		self.dataSource.apply(currentSnapshot, animatingDifferences: !firstShow && self.isVisible)
+		firstShow = false
+	}
+}
+
+extension WiFiSettingsViewController {
+	
+	override func viewDidAppear(_ animated: Bool) {
+		super.viewDidDisappear(animated)
+		self.isVisible = true
+	}
+	
+	override func viewDidDisappear(_ animated: Bool) {
+		super.viewDidDisappear(animated)
+		self.isVisible = false
+	}
 }

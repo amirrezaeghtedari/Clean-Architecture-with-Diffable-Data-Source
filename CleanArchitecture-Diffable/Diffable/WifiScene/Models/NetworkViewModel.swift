@@ -10,22 +10,22 @@ import Foundation
 
 struct NetworkViewModel: Hashable {
 	
-	let title: String
 	let type: NetworkViewModelType
-	let network: Network?
-
+	var title: String
+	var identifier: UUID
+	
+	init(network: Network, type: NetworkViewModelType) {
+		self.title = network.name
+		self.type = type
+		self.identifier = network.identifier
+	}
+	
 	init(title: String, type: NetworkViewModelType) {
 		self.title = title
 		self.type = type
-		self.network = nil
 		self.identifier = UUID()
 	}
-	init(network: Network) {
-		self.title = network.name
-		self.type = .availableNetwork
-		self.network = network
-		self.identifier = network.identifier
-	}
+
 	var isConfig: Bool {
 		let configItems: [NetworkViewModelType] = [.currentNetwork, .wifiEnabled]
 		return configItems.contains(type)
@@ -34,7 +34,6 @@ struct NetworkViewModel: Hashable {
 		return type == .availableNetwork
 	}
 
-	private let identifier: UUID
 	func hash(into hasher: inout Hasher) {
 		hasher.combine(self.identifier)
 	}
